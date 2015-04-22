@@ -10,7 +10,7 @@ class Pentomino(object):
     def normalize_coo(self, coo):
         a=self.coos[0][coo]        
         for i in self.coos :
-            if a < self.coos[i][coo] :
+            if a > self.coos[i][coo] :
                 a = self.coos[i][coo]             
         for i in self.coos :
             self.coos[i][coo] = self.coos[i][coo] - [a]
@@ -19,46 +19,46 @@ class Pentomino(object):
         a=self.coos[0][0]
         b=self.coos[0][1]        
         for i in self.coos :
-            if a < i[0] :
+            if a > i[0] :
                 a = i[0]
-            if b < i[1] :
-                b = i[1]                
+            if b > i[1] :
+                b = i[1]
         for i in range(5) :
             self.coos[i][0] = self.coos[i][0] - a
             self.coos[i][1] = self.coos[i][1] - b 
         return self
                 
     def flip(self, coo):
-        x = -100
-        y = 100
+        right = -100
+        left = 100
         for i in self.coos :
-            if x < i[coo] :
-                x = i[coo]
-            if y > i[coo] :
-                y = i[coo]
+            if right < i[coo] :
+                right = i[coo]
+            if left > i[coo] :
+                left = i[coo]
             
-        if y-x == 1 :
+        if right-left == 1 :
             for i in range(5) :
-                if self.coos[i][coo] == y :
-                    self.coos[i][coo] = y
+                if self.coos[i][coo] == left :
+                    self.coos[i][coo] = right
                 else :
-                    self.coos[i][coo] = y
-        elif y-x == 2 :
+                    self.coos[i][coo] = left
+        elif right-left == 2 :
                 for i in range(5) :
-                    if self.coos[i][coo] == y :
-                        self.coos[i][coo] = x
-                    elif self.coos[i][coo] == x :
-                        self.coos[i][coo] = y
-        elif y-x == 3 :
+                    if self.coos[i][coo] == left :
+                        self.coos[i][coo] = right
+                    elif self.coos[i][coo] == right :
+                        self.coos[i][coo] = left
+        elif right-left == 3 :
             for i in range(5) :
-                    if self.coos[i][coo] == y :
-                        self.coos[i][coo] = x
-                    elif self.coos[i][coo] == x :
-                        self.coos[i][coo] = y
-                    elif self.coos[i][coo] == y-1 :
-                        self.coos[i][coo] = y-2
+                    if self.coos[i][coo] == left :
+                        self.coos[i][coo] = right
+                    elif self.coos[i][coo] == right :
+                        self.coos[i][coo] = left
+                    elif self.coos[i][coo] == right-1 :
+                        self.coos[i][coo] = right-2
                     else :
-                        self.coos[i][coo] = y-1
+                        self.coos[i][coo] = right-1
         return self
         
     def translate_one(self, coo):
@@ -92,21 +92,26 @@ class Pentomino(object):
         for i in self.coos:
             if maxx<i[0]:
                 maxx=i[0]
-        #print(maxx)
         for i in self.coos:
             if maxx==i[0]:
                 maximum.append(i)
-        #print(maximum)
         for i in maximum:
             if maxy<i[1]:
                 maxy=i[1]
         return [maxx,maxy]
 
     def __hash__(self):
-        pass
-
-    def __eq__(self, other):  
-        return self.assertEqual(self,other)
+        c0 = copy.deepcopy(self.normalize())
+        h = 100**10
+        x=0
+        for i in range(5) :
+            x = c0.coos[i][0]*100+c0.coos[i][1]
+            h = h+x*100**(i*2)
+            x=0
+        return h
+    
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
 
     def representation(self):
         return "[" + self.name + ":" + str(self.coos) + "]"
@@ -175,10 +180,7 @@ class TileSet(object):
         return iter(self.set)
         
     def add(self, p):
-        if p not in self.set:
-            print(hash(p))
-            self.set.add([p])
-            print(self.set)
+            self.set.add(p)
 
     def size(self):
         return len(self.set)
