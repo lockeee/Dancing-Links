@@ -15,6 +15,7 @@ class Pentomino(object):
             self.coos[i][coo] = self.coos[i][coo] - [a]
 
     def normalize(self):
+        self.coos.sort()
         a=self.coos[0][0]
         b=self.coos[0][1]        
         for i in self.coos :
@@ -100,8 +101,8 @@ class Pentomino(object):
         return [maxx,maxy]
 
     def __hash__(self):
-        c0 = copy.deepcopy(self.normalize())
-        h = 100**10
+        c0 = self.normalize()
+        h = 100**len(self.coos)
         x=0
         for i in range(5) :
             x = c0.coos[i][0]*100+c0.coos[i][1]
@@ -110,20 +111,10 @@ class Pentomino(object):
         return h
     
     def __eq__(self, other):
-        self.normalize()
-        other.normalize()
-        if self.name == other.name :
-            i = 5
-            for k in self.coos :
-                for j in other.coos : 
-                    if k == j :
-                        i = i-1
-            if i == 0 :
-                return True
-            else :
-                return False
-        else :
+        if self.name != other.name :
             return False
+        else :
+            return self.__hash__() == other.__hash__()
 
     def representation(self):
         return "[" + self.name + ":" + str(self.coos) + "]"
@@ -230,6 +221,7 @@ class TileSet(object):
                 value = False
         if value :
             self.set.add(c)
+            
         
     def size(self):
         return len(self.set)
