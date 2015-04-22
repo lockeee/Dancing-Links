@@ -1,6 +1,7 @@
 import unittest
 import pentominos
 import copy
+from pentominos import Pentomino
 
 class TestPentominoMethods(unittest.TestCase):
         
@@ -61,10 +62,10 @@ class TestPentominoMethods(unittest.TestCase):
         self.assertEqual(len(s), 1)
 
     def test_fixed_pentominos(self):
+        
         orbitSize = dict()
         for p in pentominos.all_pentominos():
             orbitSize[p.name] = pentominos.fixed_pentominos_of(p).size()
-
         self.assertEqual(dict({'F': 8, 'I': 2, 'L': 8, 'N': 8, 'P': 8, 'U': 4, 'T': 4, 'W': 4, 'V': 4, 'Y': 8, 'X': 1, 'Z': 4}), orbitSize)
         self.assertEqual(pentominos.all_fixed_pentominos().size(), 63)
 

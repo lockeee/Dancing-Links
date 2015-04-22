@@ -111,7 +111,20 @@ class Pentomino(object):
         return h
     
     def __eq__(self, other):
-        return self.__hash__() == other.__hash__()
+        self.normalize()
+        other.normalize()
+        if self.name == other.name :
+            i = 5
+            for k in self.coos :
+                for j in other.coos : 
+                    if k == j :
+                        i = i-1
+            if i == 0 :
+                return True
+            else :
+                return False
+        else :
+            return False
 
     def representation(self):
         return "[" + self.name + ":" + str(self.coos) + "]"
@@ -169,6 +182,37 @@ class Z(Pentomino):
 def all_pentominos():
     return [F(), I(), L(), P(), N(), T(), U(), V(), W(), X(), Y(), Z()]
 
+def all_fixed_pentominos():
+    s = TileSet()
+    for i in all_pentominos() :
+        if i.name == "X" :
+            s.add(i)
+        elif  i.name == "I": 
+            s.add(I())
+            s.add(I().turn90())
+        else :
+            for k in range(4):
+                s.add(i.normalize())
+                s.add(i.flip(0).normalize())
+                s.add(i.flip(1).normalize())
+                s.add(i.flip(0).normalize())
+                i.flip(1).normalize()
+                i.turn90().normalize()
+    return s
+
+def fixed_pentominos_of(p):
+    s = TileSet()
+    for i in all_pentominos() :
+        if p.name == i.name :
+            for k in range(4):
+                s.add(i.normalize())
+                s.add(i.flip(0).normalize())
+                s.add(i.flip(1).normalize())
+                s.add(i.flip(0).normalize())
+                i.flip(1).normalize()
+                i.turn90().normalize()
+    return s
+
 
 class TileSet(object):
     def __init__(self, plist=[]):
@@ -180,8 +224,14 @@ class TileSet(object):
         return iter(self.set)
         
     def add(self, p):
-            self.set.add(p)
-
+        c = copy.deepcopy(p)
+        value = True
+        for i in self.set :
+            if i.__eq__(c) :
+                value = False
+        if value :
+            self.set.add(c)
+        
     def size(self):
         return len(self.set)
 
