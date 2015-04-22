@@ -1,5 +1,4 @@
 import copy
-from objc._objc import MAC_OS_X_VERSION_10_1
 
 class Pentomino(object):
     def __init__(self, name, coos):
