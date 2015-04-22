@@ -85,24 +85,28 @@ class Pentomino(object):
         self.flip(1)
         return self
             
-#    Not well defined.
     def max(self):
-        a = [-1,-1]
-        for i in self.coos :
-            if a[0]+a[1] < i[0]+i[1] :
-                a = [i[0],i[1]]
-        return a
+        maxx=-1
+        maxy=-1
+        maximum=list()
+        for i in self.coos:
+            if maxx<i[0]:
+                maxx=i[0]
+        #print(maxx)
+        for i in self.coos:
+            if maxx==i[0]:
+                maximum.append(i)
+        #print(maximum)
+        for i in maximum:
+            if maxy<i[1]:
+                maxy=i[1]
+        return [maxx,maxy]
 
     def __hash__(self):
-        coords = self.normalize()
-            
-        for i in range(5) :
-            
-            
-        return hash(( self.name ))
+        pass
 
     def __eq__(self, other):  
-        return self.assertEqual(self.coos , other.coos)
+        return self.assertEqual(self,other)
 
     def representation(self):
         return "[" + self.name + ":" + str(self.coos) + "]"
