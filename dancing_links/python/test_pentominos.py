@@ -3,9 +3,8 @@ import pentominos
 import copy
 
 class TestPentominoMethods(unittest.TestCase):
-
-#    def setUp(self):
-
+        
+    
     def test_normalize(self):
         for p in pentominos.all_pentominos():
             self.assertEqual(p.coos, p.normalize().coos, "test_normalize failed for polyomino " + p.name)
@@ -13,6 +12,8 @@ class TestPentominoMethods(unittest.TestCase):
     def test_translate(self):
         self.assertEqual([[c[0]+1,c[1]] for c in pentominos.I().coos], pentominos.I().translate_one(0).coos)
         self.assertEqual([[c[0],c[1]+1] for c in pentominos.I().coos], pentominos.I().translate_one(1).coos)
+
+
 
     def test_TileSet(self):
         s = pentominos.TileSet([pentominos.I(), pentominos.I()])
@@ -44,7 +45,6 @@ class TestPentominoMethods(unittest.TestCase):
     def test_turn90(self):
         c0 = copy.deepcopy(pentominos.I().coos)
         self.assertEqual(c0, pentominos.I().turn90().turn90().coos)
-
         p = pentominos.Y()
         s = pentominos.TileSet()
         for i in range(4):

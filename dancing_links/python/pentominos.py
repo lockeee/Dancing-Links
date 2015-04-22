@@ -1,4 +1,5 @@
 import copy
+from objc._objc import MAC_OS_X_VERSION_10_1
 
 class Pentomino(object):
     def __init__(self, name, coos):
@@ -7,34 +8,101 @@ class Pentomino(object):
         self.dim = len(coos[0])
         
     def normalize_coo(self, coo):
-        pass
+        a=self.coos[0][coo]        
+        for i in self.coos :
+            if a < self.coos[i][coo] :
+                a = self.coos[i][coo]             
+        for i in self.coos :
+            self.coos[i][coo] = self.coos[i][coo] - [a]
 
     def normalize(self):
-        pass
-
+        a=self.coos[0][0]
+        b=self.coos[0][1]        
+        for i in self.coos :
+            if a < i[0] :
+                a = i[0]
+            if b < i[1] :
+                b = i[1]                
+        for i in range(5) :
+            self.coos[i][0] = self.coos[i][0] - a
+            self.coos[i][1] = self.coos[i][1] - b 
+        return self
+                
     def flip(self, coo):
-        pass
+        x = -100
+        y = 100
+        for i in self.coos :
+            if x < i[coo] :
+                x = i[coo]
+            if y > i[coo] :
+                y = i[coo]
+            
+        if y-x == 1 :
+            for i in range(5) :
+                if self.coos[i][coo] == y :
+                    self.coos[i][coo] = y
+                else :
+                    self.coos[i][coo] = y
+        elif y-x == 2 :
+                for i in range(5) :
+                    if self.coos[i][coo] == y :
+                        self.coos[i][coo] = x
+                    elif self.coos[i][coo] == x :
+                        self.coos[i][coo] = y
+        elif y-x == 3 :
+            for i in range(5) :
+                    if self.coos[i][coo] == y :
+                        self.coos[i][coo] = x
+                    elif self.coos[i][coo] == x :
+                        self.coos[i][coo] = y
+                    elif self.coos[i][coo] == y-1 :
+                        self.coos[i][coo] = y-2
+                    else :
+                        self.coos[i][coo] = y-1
+        return self
         
     def translate_one(self, coo):
-        pass
+        for i in range(5) :
+            self.coos[i][coo] = self.coos[i][coo] + 1
+        return self
 
     def translate_coo(self, coo, amount):
-        pass
+        for i in self.coos :
+            self.coos[i][coo] = self.coos[i][coo] + amount 
+        return self
 
     def translate_by(self, by_vector):
-        pass
+        for i in self.coos :
+            self.coos[i][0] = self.coos[i][0] + by_vector[0] 
+            self.coos[i][1] = self.coos[i][1] + by_vector[1]
+        return self
 
     def turn90(self):
-        pass
-
+        for i in range(5) :
+            coord = self.coos[i][1]
+            self.coos[i][1]=self.coos[i][0]
+            self.coos[i][0]=coord
+        self.flip(1)
+        return self
+            
+#    Not well defined.
     def max(self):
-        pass
+        a = [-1,-1]
+        for i in self.coos :
+            if a[0]+a[1] < i[0]+i[1] :
+                a = [i[0],i[1]]
+        return a
 
     def __hash__(self):
-        pass
+        coords = self.normalize()
+            
+        for i in range(5) :
+            
+            
+        return hash(( self.name ))
 
-    def __eq__(self, other):
-        pass
+    def __eq__(self, other):  
+        return self.assertEqual(self.coos , other.coos)
 
     def representation(self):
         return "[" + self.name + ":" + str(self.coos) + "]"
@@ -103,10 +171,13 @@ class TileSet(object):
         return iter(self.set)
         
     def add(self, p):
-        pass
+        if p not in self.set:
+            print(hash(p))
+            self.set.add([p])
+            print(self.set)
 
     def size(self):
-        pass
+        return len(self.set)
 
     def representation(self):
         rep = "["
