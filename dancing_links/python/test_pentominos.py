@@ -4,7 +4,8 @@ import copy
 from pentominos import Pentomino
 
 class TestPentominoMethods(unittest.TestCase):
-        
+     
+     
     
     def test_normalize(self):
         for p in pentominos.all_pentominos():
